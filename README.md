@@ -8,12 +8,12 @@ DoubleVim
 
 *실행방법*
 
-python grid.py
+`python grid.py`
 
 *사용 방법*
 1. 그리드 켜기 HOTKEY (Release 때 켜짐)
 
-ctrl + windows + v
+`ctrl + windows + v`
 
 2. 원하는 위치 단축키 누르기
 

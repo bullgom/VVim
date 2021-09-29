@@ -6,12 +6,12 @@ DoubleVim
 
 현재 버그 존재.
 
-실행
+*실행방법*
 
 python grid.py
 
-사용 방법
-1. 그리드 키기 HOTKEY (Release 때 켜짐)
+*사용 방법*
+1. 그리드 켜기 HOTKEY (Release 때 켜짐)
 
 ctrl + windows + v
 

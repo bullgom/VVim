@@ -1,7 +1,7 @@
 """
 화면 크기에 맞춰서 그리드를 그려주는 파일
 """
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 from tkinter import Tk, Text  # or(from Tkinter import Tk) on Python 2.x
 import tkinter as tk
 import string
@@ -21,7 +21,15 @@ def fullscreen(win: Tk):
 
 class Grid(Tk):
 
-    def __init__(self, cell_per_pixel=10, toggle_key="ctrl+windows+v", *args, **kwargs):
+    def __init__(
+        self,
+        cell_per_pixel=10,
+        toggle_key="ctrl+windows+v",
+        adjust_amount: int = 1,
+        *args,
+        **kwargs
+    ):
+
         super().__init__(*args, **kwargs)
         self.wait_visibility(self)
         # 배경 투명하게
@@ -34,52 +42,99 @@ class Grid(Tk):
         # 전체 화면 모드
         self.attributes("-fullscreen", True)
 
+        self.hook = None
+        self.hidden = False
+        self.toggle_key = toggle_key
         self.cell_per_pixel = cell_per_pixel
         self.cell_positions: Dict[str, Tuple[int, int]] = {}
         cols, rows = self.grid_size()
         self.cs = self.combination_size(cols, rows)
 
-        self.hidden = False
-        self.toggle_key = toggle_key
+        self.adjust_offsets = [0, 0]
+        self.adjsut_amount = adjust_amount
+        self.adjust_map = {
+            "left": (-self.adjsut_amount, 0),
+            "up": (0, -self.adjsut_amount),
+            "right": (self.adjsut_amount, 0),
+            "down": (0, self.adjsut_amount)
+        }
+
         self.clear_pressed()
-        keyboard.add_hotkey(self.toggle_key, self.toggle, suppress=True, timeout=0.5, trigger_on_release=True)
-        self.hook = keyboard.on_press(self.add_pressed, suppress=True)
-        
-        self.toggle()
-        
+        keyboard.add_hotkey(self.toggle_key, self.toggle,
+                            suppress=True, timeout=0.5, trigger_on_release=True)
+        self.toggle(False)
 
-    def add_pressed(self, event: keyboard.KeyboardEvent):
-        if not self.hidden:
-            self.pressed.append(event.name)
-            
-        else:
-            self.clear_pressed()
+    def on_key_press(self, event: keyboard.KeyboardEvent):
+        """키를 입력 받았을 때 해당되는 기능 수행"""
 
-        if not self.hidden and event.name == 'esc':
+        x = event.name
+        if self.is_combination_key(x):
+            """위치 지정에 사용되는 값 중 하나이면, 저장"""
+            self.add_pressed(x)
+
+            if self.is_valid_combination(self.pressed):
+                """조합이 완성 됐을 때"""
+                self.on_combination()
+
+        elif x == 'esc':
+            """esc는 취소. 화면 내리기"""
             self.toggle(False)
-            return
-        
-        if len(self.pressed) >= self.cs:
-            self.click("".join(self.pressed))
-            self.clear_pressed()
-            self.toggle()
+
+        elif self.is_adjust_key(x):
+            ax, ay = self.adjust_map[x]
+            self.adjust_offsets[0] += ax
+            self.adjust_offsets[1] += ay
+            self.adjust_grid(ax, ay)
+
+    def add_pressed(self, key: str):
+        self.pressed.append(key)
+
+    def is_combination_key(self, x: str) -> bool:
+        return x in string.ascii_lowercase
+
+    def is_adjust_key(self, x: str) -> bool:
+        return x in self.adjust_map.keys()
+
+    def is_valid_combination(self, x: List[str]) -> bool:
+        return len(x) >= self.cs
+
+    def adjust_grid(self, x: int, y: int):
+        """Grid를 Offset만큼 움직여서 보여주기"""
+        self.canvas.scan_mark(0, 0)
+        self.canvas.scan_dragto(x, y, gain=1)
+
+    def on_combination(self):
+        # 화면을 먼저 내린 후 끈다.
+        self.toggle()
+        self.click("".join(self.pressed))
+        self.clear_pressed()
 
     def clear_pressed(self):
         self.pressed: List[str] = []
 
-    def toggle(self, value=None):
-        
+    def add_hook(self):
+        self.hook = keyboard.on_press(self.on_key_press, suppress=True)
+
+    def remove_hook(self):
+        try:
+            keyboard.unhook(self.hook)
+        except KeyError:
+            pass
+
+        self.hook = None
+
+    def toggle(self, value: Optional[bool] = None):
+
         if value:
             self.hidden = not value
-        
+
         if self.hidden:
             self.deiconify()
-            #self.focus_set()
-            self.hook = keyboard.on_press(self.add_pressed, suppress=True)
+            # self.focus_set()
+            self.add_hook()
         else:
             self.withdraw()
-            keyboard.unhook(self.hook)
-            self.hook = None
+            self.remove_hook()
 
         self.hidden = not self.hidden
 
@@ -87,7 +142,7 @@ class Grid(Tk):
 
         try:
             x, y = self.cell_positions[cell]
-            pag.click(x,y)
+            pag.click(x+self.adjust_offsets[0], y+self.adjust_offsets[1])
             print(f"click {x}. {y}")
         except KeyError:
             print(f"No key")

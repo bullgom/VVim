@@ -11,9 +11,9 @@ DoubleVim
 `python grid.py`
 
 *사용 방법*
-1. 그리드 켜기 HOTKEY (Release 때 켜짐)
-
-`ctrl + windows + v`
-
+1. `ctrl + windows + v`를 눌러서 그리드 켜기 (Release 때 켜짐)
 2. 원하는 위치 단축키 누르기
 
++ 그리드가 켜진 상태에서
+    - 방향키를 사용해서 세부적인 클릭 위치를 조절할 수 있음
+    - esc를 눌러서 종료할 수 있음

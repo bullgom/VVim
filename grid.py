@@ -7,6 +7,7 @@ import tkinter as tk
 import string
 import keyboard
 import pyautogui as pag
+import os
 
 """ TODO: 듀얼 모니터에서 사용 가능하도록 만들기
 def fullscreen(win: Tk):
@@ -25,7 +26,9 @@ class Grid(Tk):
         self,
         cell_per_pixel=10,
         toggle_key="ctrl+windows+v",
+        quit_key="ctrl+windows+q",
         adjust_amount: int = 1,
+        time_out: float = 0.5,
         *args,
         **kwargs
     ):
@@ -45,6 +48,7 @@ class Grid(Tk):
         self.hook = None
         self.hidden = False
         self.toggle_key = toggle_key
+        self.quit_key = quit_key
         self.cell_per_pixel = cell_per_pixel
         self.cell_positions: Dict[str, Tuple[int, int]] = {}
         cols, rows = self.grid_size()
@@ -61,8 +65,15 @@ class Grid(Tk):
 
         self.clear_pressed()
         keyboard.add_hotkey(self.toggle_key, self.toggle,
-                            suppress=True, timeout=0.5, trigger_on_release=True)
+                            suppress=True, timeout=time_out, trigger_on_release=True)
+        keyboard.add_hotkey(self.quit_key, self.end_program, suppress=True,
+                            timeout=time_out, trigger_on_release=True)
         self.toggle(False)
+
+    def end_program(self):
+        keyboard.unhook_all()
+        keyboard.unhook_all_hotkeys()
+        os._exit(1)
 
     def on_key_press(self, event: keyboard.KeyboardEvent):
         """키를 입력 받았을 때 해당되는 기능 수행"""
@@ -130,10 +141,10 @@ class Grid(Tk):
 
         if self.hidden:
             self.deiconify()
-            # self.focus_set()
             self.add_hook()
         else:
             self.withdraw()
+            # self.iconify()
             self.remove_hook()
 
         self.hidden = not self.hidden
@@ -143,9 +154,13 @@ class Grid(Tk):
         try:
             x, y = self.cell_positions[cell]
             pag.click(x+self.adjust_offsets[0], y+self.adjust_offsets[1])
-            print(f"click {x}. {y}")
         except KeyError:
-            print(f"No key")
+            pass
+
+    def raise_topmost(self):
+        self.lift()
+        self.attributes('-topmost', True)
+        self.after_idle(self.attributes, '-topmost', False)
 
     def run(self):
         self.mainloop()

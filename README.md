@@ -24,7 +24,9 @@ Or *Run with executable*
 1. Opening the grid takes the focus. This might be a problem when other programs react to loosing focus.
 2. Unable to bring the grid over system-level windows. Such as `Windows-Start`
 
-#VVim 더블빔
+<hr/>
+
+# VVim 더블빔
 
 클릭은 해야하는데, 마우스까지 손을 움직이기 귀찮을 때가 종종 있다.
 이제는 키보드로 클릭하자.

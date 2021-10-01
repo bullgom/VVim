@@ -1,21 +1,26 @@
 # VVim
 DoubleVim
 
-마우스까지 손을 옮기기 귀찮다.
-키보드로 클릭하자.
+It's hard work to move our hands to grab the mouse and click on something. 
+It takes forever.
+Let's click with our keyboards now.
 
-
-*실행방법*
-
+*Run with following command*
 `python grid.py`
 
-*사용 방법*
-1. `ctrl + windows + v`를 눌러서 그리드 켜기 (Release 때 켜짐)
-2. 원하는 위치 단축키 누르기
+Or *Run with executable*
+`VVim.exe`
 
-+ 그리드가 켜진 상태에서
-    - 방향키를 사용해서 세부적인 클릭 위치를 조절할 수 있음
-    - esc를 눌러서 종료할 수 있음
+*How to use*
+1. Open grid using `ctrl + windows + v` (This will open the grid on key release)
+2. Press the combinations you want to click on.
 
-*문제*
-1. 그리드를 켤 때 focus가 잡혀버림. 그래서 기존 작업에 영향을 줄 수 있음.
+*When the grid is up.*
+    - Use `arrow keys` to adjust the grid.
+    - Press `esc` to close the grid.
+    - Press `ctrl + windows + q` to quit the program.
+
+
+*Problems*
+1. Opening the grid takes the focus. This might be a problem when other programs react to loosing focus.
+2. Unable to bring the grid over system-level windows. Such as `Windows-Start`

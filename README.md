@@ -26,6 +26,11 @@ Or *Run with executable*
 1. Opening the grid takes the focus. This might be a problem when other programs react to loosing focus.
 2. Unable to bring the grid over system-level windows. Such as `Windows-Start`
 
+*TODO*
+1. Customizable grid size
+2. Multi monitor
+3. Customizable shortcuts
+
 <hr/>
 
 # VVim 더블빔
@@ -55,3 +60,8 @@ Or *Run with executable*
 *현재 문제점*
 1. 그리드를 켤 때, 해당 윈도우가 focus를 먹는다. 그래서 기존 작업 하던 프로그램에서 지장을 받을 수 있다.
 2. 시스템 수준의 윈도우 위로 그리드가 올라가지 못한다. 예를 들어서: 윈도우 시작 화면
+
+*해야 할 일*
+1. 다중 모니터 지원
+2. 단축키 설정 가능
+3. 그리드 크기 설정 

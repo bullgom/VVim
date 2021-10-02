@@ -30,6 +30,7 @@ Or *Run with executable*
 1. Customizable grid size
 2. Multi monitor
 3. Customizable shortcuts
+4. Modularize
 
 <hr/>
 
@@ -65,3 +66,4 @@ Or *Run with executable*
 1. 다중 모니터 지원
 2. 단축키 설정 가능
 3. 그리드 크기 설정 
+4. 모듈화

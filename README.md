@@ -5,9 +5,11 @@ It takes forever.
 Let's click with our keyboards now.
 
 *Open grid with following command*
+
 `python grid.py`
 
 Or *Run with executable*
+
 `VVim.exe`
 
 *How to use*
@@ -15,9 +17,9 @@ Or *Run with executable*
 2. Press the combinations you want to click on.
 
 *When the grid is up.*
-    - Use `arrow keys` to adjust the grid.
-    - Press `esc` to close the grid.
-    - Press `ctrl + windows + q` to quit the program.
+- Use `arrow keys` to adjust the grid.
+- Press `esc` to close the grid.
+- Press `ctrl + windows + q` to quit the program.
 
 
 *Problems*
@@ -37,6 +39,7 @@ Or *Run with executable*
 
 *실행 파일로도 실행 가능하다*
 `VVim.exe`
+
 시작 프로그램에 넣어서 컴퓨터 시작할 떄 실행시킬 수도 있다.
 
 *사용 방법*
